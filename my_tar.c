@@ -46,7 +46,7 @@ int main(int ac, char** av) {
                         printf("error: archive -f must be specified\n");
                         return 1;
                     }
-                    tarList(tarName);
+                    if(tarList(tarName)) return 1;
                     break;
                 case xMode: 
                     if(!fFlag) {
@@ -67,7 +67,7 @@ int main(int ac, char** av) {
                         printf("error: archive -f must be specified\n");
                         return 1;
                     }
-
+                    if(updateEntry(tarName, av, &i, ac)) return 1;
                     break;
                 default: 
                     printf("error: no mode specified\n");

@@ -39,9 +39,10 @@ int setFlags(int* mode, int* fFlag, char* flags);
 int extractTarEntry(tar_header** head, int fd);
 void creatFile(char* fullPath, int flags, unsigned int mode, unsigned long size, unsigned long modTime, int type, int fd);
 int tarExtract(char* tarName, char* path);
-int readEntry(int fd);
-void tarList(char* tarName);
+char* readEntry(int fd);
+int tarList(char* tarName);
 int tarAppend(char* tarName, char** args, int* i, int numArgs);
+int updateEntry(char* tarName, char** args, int* i, int numArgs);
 int tarAdd(int fd, char* argument);
 int createTar(char* tarName, char** args, char* path, int flag, int* i, int numArgs);
 

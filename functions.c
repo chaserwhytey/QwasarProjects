@@ -147,11 +147,10 @@ int tarExtract(char* tarName, char* path) {
     return 0;
 }
 
-int readEntry(int fd) {
+char* readEntry(int fd) {
     tar_header* head = (tar_header*)malloc(sizeof(tar_header));
     int ret = read(fd, head->name, sizeof(head->name));
     if(ret != 0) {
-        printf("%s\n", head->name);
         lseek(fd, sizeof(head->mode) + sizeof(head->owner) + sizeof(head->group), SEEK_CUR);
         read(fd, head->size, sizeof(head->size));
         int size = oct2num(head->size, 8, sizeof(head->size));
@@ -165,14 +164,25 @@ int readEntry(int fd) {
         size = head->type == DIRECTORY ? 0 : size + offset;
         lseek(fd, size, SEEK_CUR);
     }
+    char* name = (char*)malloc(ret);
+    strncpy(name, head->name, strlen(head->name) + 1);
     free(head);
-    return ret;
+    return name;
 }
 
-void tarList(char* tarName) {
+int tarList(char* tarName) {
     int fd = open(tarName, O_RDONLY);
-    while(readEntry(fd)) {      
+    if(fd < 0) {
+        printf("error: archive %s does not exist\n", tarName);
+        return 1;
     }
+    char* buffer;
+    while((buffer = readEntry(fd))) {    
+        printf("%s\n", buffer);
+        free(buffer);
+    }
+    close(fd);
+    return 0;
 }
 
 int tarAppend(char* tarName, char** args, int* i, int numArgs) {
@@ -185,6 +195,25 @@ int tarAppend(char* tarName, char** args, int* i, int numArgs) {
     for(; *i < numArgs; *i = *i + 1) {
         if(tarAdd(fd, args[*i])) return 1;
     }
+    close(fd);
+    return 0;
+}
+int updateEntry(char *tarName, char **args, int *i, int numArgs) {
+    int fd = open(tarName, O_RDWR);
+    if(fd < 0) {
+        printf("error: %s does not exist", tarName);
+        return 1;
+    }
+    char* buffer;
+    while((buffer = readEntry(fd))) {
+        for(int j = *i; j < numArgs; j++) {
+            if(!strncmp(args[j], buffer, strlen(buffer))) {
+                tar_header* head = (tar_header*)malloc(sizeof(tar_header));
+                
+            }
+        }
+    }
+    *i = numArgs;
     close(fd);
     return 0;
 }
