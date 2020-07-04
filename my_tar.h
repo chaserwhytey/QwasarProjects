@@ -34,12 +34,15 @@ typedef struct tar_header{
 } tar_header;
 
 void utoa(unsigned int val, int base, int size, int fd);
-unsigned int oct2num(char* oct, int base, int size);
+unsigned long oct2num(char* oct, int base, int size);
 int setFlags(int* mode, int* fFlag, char* flags);
 int extractTarEntry(tar_header** head, int fd);
+void creatFile(char* fullPath, int flags, unsigned int mode, unsigned long size, unsigned long modTime, int type, int fd);
 int tarExtract(char* tarName, char* path);
+int readEntry(int fd);
 void tarList(char* tarName);
-int tarAdd(int fd, char* argument, char* path, int* pos);
+int tarAppend(char* tarName, char** args, int* i, int numArgs);
+int tarAdd(int fd, char* argument);
 int createTar(char* tarName, char** args, char* path, int flag, int* i, int numArgs);
 
 #endif

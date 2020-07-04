@@ -17,7 +17,7 @@ int main(int ac, char** av) {
                 printf("error: directory not specified.\n");
                 return 1;
             }
-            strncpy(path, av[i + 1], strlen(av[i]) + 2);
+            strncpy(path, av[i + 1], strlen(av[i + 1]) + 2);
             path[strlen(path)] = '/';
             i++;
         }
@@ -29,7 +29,6 @@ int main(int ac, char** av) {
         else {
             char buffer[100] = {0};
             if(fFlag) {
-                strncpy(buffer, path, strlen(path));
                 strncpy(&buffer[strlen(buffer)], av[i], strlen(av[i]) + 1);
                 i++;
                 tarName = buffer;
@@ -55,6 +54,25 @@ int main(int ac, char** av) {
                         return 1;
                     }
                     if(tarExtract(tarName, path)) return 1;
+                    break;
+                case rMode:
+                    if(!fFlag) {
+                        printf("error: archive -f must be specified\n");
+                        return 1;
+                    }
+                    if(tarAppend(tarName, av, &i, ac)) return 1;
+                    break;
+                case uMode:
+                    if(!fFlag) {
+                        printf("error: archive -f must be specified\n");
+                        return 1;
+                    }
+
+                    break;
+                default: 
+                    printf("error: no mode specified\n");
+                    return 1;
+                    break;
             }
             
         }
