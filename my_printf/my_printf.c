@@ -28,7 +28,7 @@ int utoa(long long val, int base){
         isNegative = 1;
         val*=-1;
     }
-    char* buf = (char*) malloc(32);
+    char buf[32];
     buf[31] = 0;
     int i = 30;
     for(; val && i ; --i, val /= base)
@@ -39,7 +39,6 @@ int utoa(long long val, int base){
     }
     my_putstr(&buf[i+1]);
     ret += strlen(&buf[i+1]);
-    free(buf);
     return ret;
 }
 
