@@ -18,7 +18,7 @@ TARGET = my_tar
 all: $(TARGET)
 
 # All the .o files we need for our executable.
-OBJS = my_tar.o functions.o
+OBJS = main.o my_tar.o files_strings.o
 
 # The executable
 $(TARGET): $(OBJS)
@@ -29,10 +29,12 @@ debug: CFLAGS += -g
 debug: $(TARGET)
 
 # Individual source files
+files_strings.o: files_strings.c my_tar.h
+	$(CC) $(CFLAGS) -c files_strings.c
 my_tar.o: my_tar.c my_tar.h
 	$(CC) $(CFLAGS) -c my_tar.c
-functions.o: functions.c my_tar.h
-	$(CC) $(CFLAGS) -c functions.c
+main.o: main.c my_tar.h
+	$(CC) $(CFLAGS) -c main.c
 
 # A "phony" target to remove built files and backups
 clean:
