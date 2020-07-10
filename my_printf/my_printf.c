@@ -28,16 +28,16 @@ int utoa(long long val, int base){
         isNegative = 1;
         val*=-1;
     }
-	char* buf = (char*) malloc(32);
+    char* buf = (char*) malloc(32);
     buf[31] = 0;
-	int i = 30;
-	for(; val && i ; --i, val /= base)
-		buf[i] = hexNums[val % base];
+    int i = 30;
+    for(; val && i ; --i, val /= base)
+	buf[i] = hexNums[val % base];
     if(isNegative) {
         my_putstr("-");
         ret++;
     }
-	my_putstr(&buf[i+1]);
+    my_putstr(&buf[i+1]);
     ret += strlen(&buf[i+1]);
     free(buf);
     return ret;
