@@ -180,7 +180,7 @@ int insertEntry(int fd, unsigned long size, struct stat fileStat, char* arg) {
         write(tmp, buffer, bytes);
     }
     close(readFile);
-    int offset = lseek(tmp, newSize % BLOCK_SIZE == 0 ? 0 : BLOCK_SIZE - newSize % BLOCK_SIZE, SEEK_CUR);
+    int returnToOffset = lseek(tmp, newSize % BLOCK_SIZE == 0 ? 0 : BLOCK_SIZE - newSize % BLOCK_SIZE, SEEK_CUR);
     lseek(fd, writeFromVal, SEEK_SET);
     for(int k = 0; k < 4096; k++) buffer[k] = '\0';
     while((bytes = read(fd, buffer, sizeof(buffer)))) {
@@ -194,6 +194,8 @@ int insertEntry(int fd, unsigned long size, struct stat fileStat, char* arg) {
     }
     close(tmp);
     free(newEntry);
+    offset = 0;
+    lseek(fd, returnToOffset, SEEK_SET);
     return offset;
 }
 
