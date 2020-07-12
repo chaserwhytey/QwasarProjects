@@ -4,6 +4,13 @@
 #include <dirent.h>
 #include <stdio.h>
 
+int isDirectory(const char *path) {
+   struct stat statbuf;
+   if (stat(path, &statbuf) != 0)
+       return 0;
+   return S_ISDIR(statbuf.st_mode);
+}
+
 int my_strncmp(char* s1, char* s2, int length) {
     for(int i = 0; i < length; i++) {
         if(s1[i] != s2[i]) return 1;
@@ -43,14 +50,12 @@ int getFileCount(char* path) {
     return file_count;
 }
 
-void utoa(unsigned int val, int base, int size, int fd, char* var){
+void utoa(unsigned int val, int base, char* var){
 	char buf[32];
     buf[31] = 0;
 	int i = 30;
 	for(; val && i ; --i, val /= base)
 		buf[i] = nums[val % base];
-	int len = write(fd, &buf[i+1], my_strlen(&buf[i + 1]));
-    lseek(fd, size - len, SEEK_CUR);
     my_strncpy(var, &buf[i+1], my_strlen(&buf[i+1]) + 1);
 }
 
