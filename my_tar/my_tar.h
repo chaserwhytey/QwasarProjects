@@ -33,21 +33,30 @@ typedef struct tar_header{
     char padding[BLOCK_SIZE - 100 - 8 - 8 - 8 - 12 - 12 - 1 - 1 - 100];
 } tar_header;
 
+int tar(char** av, int fFlag, char* tarName, int* i, char* path, int mode, int ac);
+int handleOptions(char** av, char* path, int* i, int* fFlag, int* mode);
+int isDirectory(const char *path);
 int my_strncmp(char* s1, char* s2, int length);
 int my_strlen(char* c1);
 void my_strncpy(char* c1, char* c2, int length);
 int getFileCount(char* path);
-void utoa(unsigned int val, int base, int size, int fd, char* var);
+void utoa(unsigned int val, int base, char* var);
 unsigned long oct2num(char* oct, int base, int size);
 int setFlags(int* mode, int* fFlag, char* flags);
 int extractTarEntry(tar_header** head, int fd);
+void setToZero(tar_header* head);
 void creatFile(char* fullPath, int flags, unsigned int mode, unsigned long size, unsigned long modTime, int type, int fd);
 int tarExtract(char* tarName, char* path);
 int tarList(char* tarName);
 int tarAppend(char* tarName, char** args, int* i, int numArgs);
-int updateEntry(char *tarName, char **args, int i, int numArgs);
+void readContents(char** dirFiles, tar_header* head);
+int updateDir(int fd, tar_header* head, struct stat fileStat, char* arg, char* tarName);
+void transferContents(int readFile, int tmp, char* buffer);
+void writeToOffset(int fd, int tmp, unsigned int writeToVal, char* buffer);
+void insertEntry(int fd, unsigned long size, struct stat fileStat, char* arg);
 int updateEntry(char* tarName, char** args, int i, int numArgs);
-int writeEntry(tar_header ** head, struct stat fileStat, char* arg, int fd);
+int writeEntry(tar_header * head, struct stat fileStat, char* arg, int fd);
+void freeStrings(char** strings, int count);
 int tarAdd(int fd, char* argument);
 int createTar(char* tarName, char** args, char* path, int flag, int* i, int numArgs);
 
