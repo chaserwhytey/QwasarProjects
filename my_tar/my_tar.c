@@ -19,7 +19,6 @@ int tar(char** av, int fFlag, char* tarName, int* i, char* path, int mode, int a
         my_strncpy(&buffer[my_strlen(buffer)], av[*i], my_strlen(av[*i]) + 1);
         *i = *i + 1;
         tarName = buffer;
-        printf("%s\n", tarName);
     }
     switch(mode) {
         case cMode: 
@@ -157,7 +156,6 @@ void createFile(char* fullPath, int flags, unsigned int mode, unsigned int size,
 
 int tarExtract(char* tarName, char* path) {
     int fd = open(tarName, O_RDONLY);
-    printf("%s\n", tarName);
     if(fd == -1) {
         printf("error: could not open file %s", tarName);
         return 1;
@@ -171,7 +169,6 @@ int tarExtract(char* tarName, char* path) {
         unsigned long modTime = oct2num(head.modified, 8, sizeof(head.modified));
         unsigned int mode = oct2num(head.mode, 8, sizeof(head.mode));
         my_strncpy(fullPath + my_strlen(path), head.name, sizeof(head.name));
-        printf("%s\n", head.name);
         int flags = (O_CREAT | O_WRONLY);
         if(!stat(fullPath, &fileStat)) {
             unsigned long time = fileStat.st_mtime;
