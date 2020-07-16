@@ -47,7 +47,7 @@ char* my_readline(int fd) {
     int stringInd = 0;
     while(!newline){
         if(buffer[READLINE_READ_SIZE] == '\0') {
-            if(!(bytesRead = read(fd, buffer, READLINE_READ_SIZE))) return NULL;
+            if((bytesRead = read(fd, buffer, READLINE_READ_SIZE) <= 0)) return NULL;
             if(bytesRead < READLINE_READ_SIZE) {
                 buffer[bytesRead] = '\0';
             }
